@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hippo Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+
+        #game {
+            position: relative;
+            width: 800px;
+            height: 200px;
+            background-color: #87CEEB;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+
+        #Hippo {
+            position: absolute;
+            bottom: 0;
+            left: 50px;
+            width: 70px;
+            height: 70px;
+            transition: bottom 0.1s;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAAXNSR0IArs4c6QAAAjtJREFUaEPtWctZwzAMTjoEJ44MwgBMwWBMwQAMwpETQ7R8CaifosrWw3WUEPXY6vXrl2xZHYeDfcZGvBdB32pfsofdWW3Pui4l5FUK0GpfshcCeBHUy/DEkvw+fLqLp2QTDCLb1oS6GD4E4JtSq7HwcHp0sft9/jLpeZjWlsQV8OvpeQ6qFty9AHNtAf6nGN7OH+aelgDPQLET8KABbGWM0isBnuwzMlVMZsCtIDQ1i0FcLr/FNY71UCtyC0UT4DXATuAiAC8OKU3fapiTZAAoHIi0XLVXIKN/JbbE8KJ312ZWuoelxNXu6wT8l51kWFtGLXK0hydb3J1OW6wkww0mmyppLllewGQw2eahxQEuDR+Y5ZIMmsQSME1uyKHV0v9CdeyH4ZYkmA+tew0AnqBbFgjEn2qWnks6AXuocurAdQQnLX2i0u/JU7H4KKI/qNY3TgwmtTUAm9Y4pugbhLnpCz8hcdtpVj6Y4cMBxjyEH1r0iUcPUI55K8ObBGzphhbAkx9264EDWGsxoAV9GMAaoJA0aYkHcsX/fOj96GUdriGP/q4BQ4Yx8Npiv/BMVA8e2nYRmbcaAnluQ/qvAeNElda1NJm1tSyV1fawlzCLXnHwkV5OewXMJQeSIBGjlXP9P2xhrVVWC0Qrt3nArQm70ZdK5e4Oow0m4GgGevtPhntnONp+MhzNQG//yXDvDEfbT4ajGejtPxnuneFo+8lwNAO9/SfDvTMcbT8Zjmagt/9kuHeGo+0fjuEf0QoYTAxfF+wAAAAASUVORK5CYIIA");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .obstacle {
+            position: absolute;
+            bottom: 0;
+            width: 70px;
+            height: 85px;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAA8AXHiAAAAAXNSR0IArs4c6QAABi9JREFUeF7tnW1y3DYMhteTzPQWPURO0qP2JD1Eb5GZdJzxZmWzFkWAJF5+bB7/FQWSLx4CFERrX278oYBAgReBTUyiwA2wgECiAGBJZMUoYMGARAHAksiKUcCCAYkCgCWRFaOABQMSBQBLIitGAQsGJAoAlkRWjAIWDEgUACyJrBgFLBiQKABYElkxClgwIFEAsCSyYhSwYECiAGBJZMUoYMGARAHAksiKUcCCAYkCgCWRFaOABQMSBQBLIitGAQsGJAoAlkRWjAIWDEgUACyJrBgFLBiQKABYElkxClgwIFEAsCSyYhSwYECiAGBJZMUoYMGARAHAksiKUcCCAYkCgCWRFaOABQMSBQBLIitGAQsGJAoAlkRWjAIWDEgUACyJrBgFLBiQKABYElkxClgwIFEAsCSyYhSwYECiAGBJZMUoYMGARAHAksiKUcCCAYkCgCWRFaOABQMSBQBLIitGAQsGJAoAlkRWjALWOAZeK7va2jdbD77SUbObA9ZsDzxp/7VgpTJsFwC2G/DG0AHWxs5beeiAtbJ3NhvbCaav38oz+PFP8fo2GWabgW4G1DFcwNrUcSsN25Xq0oj15c/zuv7v319mLiLXNoFgm4GuRNDFWAArEQaw4ogFLMCKo+l2u92Ben09c/Xycl63pMJQ7Z/aGGBl3LtDKiylmJXGTyrcLBUC1ofDVlpI2xfcAAuwwvZSrrRy0dtKq7pYIKWOFcaL2xBg5V/trLRotkyFLrAcj/gjHeEa8x9/lYdE5d0dfJoaupwEWE3aDrlp5IqumRBgkQpreDHbXm52jeMkqeHRi6WqQEoqNBmQNAAsTjcsAdbo6FSatCt9E7Ek3JhGayMWYJmSzmmwkmPuhwQ+y3CcBtjg4BsRa7F3ha7juxuAla6Jyznlqu3pjdSx4iIsYCVaAtYgsI4V/v1vV6Z5G9Xo9O4a2JHSiVhx4FiWXC9qAesu4+hFY/nu8voKAwUsUmEzwLkbXXurUiqc+K7wfeyOMdznTioMZadoDLAy8rB57wew6pH8mfdYB0yppJuVV040zNxjAdbDHYDVH6Wai4hELJ4KvfhFRKyZEbc0z6q5EbG8yPjaVYl/EbEAy6f18FYzHRMBVk6wEXNyVdvTwZXKDUSsWO4Bi817LFEPa4AFWGPAKp2uzO2xHFXv6LR4eb49Vaj0lZnSP6lSx4rh7BSxAOtDWAqk7ZB1g3XRdXSUynXj2rxb38LKGeaVTjtQx52AxbvCfooyFgALsJYFa0Ta807eda7MMkYqtBSyr0dELMCydZ7SYqZjIsBauvLO5n0K0+f/IawtN/BUOMdxnl6JWB6Vzm0oNxi6bQ3WSpX3lm+6U8dqW9XWXd17LMCyJJ53feuI9Yx7rGNOm50/O7kCsNoWtWyPBVhtDknv6k6FRKx+J6gsPFPEmjmXN/+EVN6JWP2oR0cswOr3SZiFmc6IBqskStQ8XXurYyAtlXciVj/bgFXQkKfCdsAAC7Da6SncWQVWaqd0tERQNK3+skxPKuTYTD9rgJXRELAEYAV9Qyo3sqGbd+88cgM1wPKqHjVfb39rV969DmkQP0po11Ohdx6A1cxt8caqf1j17rHE1XjAcrIQtZKd3f2vmQqs0XNqnkcpYqXXKn6gakQtz+Xr0U5IB9XskMU2uM3zACwXo9WNuh0y4WNsU1JhroTiVTt3AHHEZ723jFiHqIBl4wVYFZ+sBiwbqKMFYAWBtULl3fpNwhIWuf3jMacLSN7NOeb+zpsfzbaWT5cKHeLWzrn6lQ5gzf1tlu7Ne/qJxaBH8rblmUTbNwPWDzG1RixrcEZEq11QVnfF60M7+zQSwMq4ppQKLU8D1i+FAAuwrLXSdP0OVs8py98lFTap+3HTlKw0pdPHnAHLGbEAq06BbrDS7nLfSq8bTl/rng17bh6BDyNTgseUTqMiFmC5FsMUH0/pFLCugWg4a2bRNcXHUzpVgGWpu8t1yg39ngrdY/UPZw0LgNXvhxNYh8mojXD/EMdb4F1hv+aA5Sw38BK6DjbAAqw6Ypytu1/pOPtZvpn1e4WcIK1zIWA99AKsOnCs1oCVASuw4v5Z/6GlpaGdfZopYAGWFXyargPWE4P1Ez4he8TB8xc3AAAAAElFTkSuQmCC");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        #count {
+            position: absolute;
+            top: 15px;
+            left: 650px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="Hippo"></div>
+        <div id="count">Jumps: 0</div>
+    </div>
+
+    <script>
+        let Hippo = document.getElementById("Hippo");
+        let game = document.getElementById("game");
+        let scoreDisplay = document.getElementById("score");
+        let isJumping = false;
+        let score = 0;
+        let obstacleSpeed = 20;
+        let countDisplay = document.getElementById("count");
+        let count = 0;
+
+        function jump() {
+            if (!isJumping) {
+                isJumping = true;
+                let jumpHeight = 100;
+                let upInterval = setInterval(() => {
+                    if (jumpHeight <= 0) {
+                        clearInterval(upInterval);
+                        let downInterval = setInterval(() => {
+                            if (jumpHeight >= 100) {
+                                clearInterval(downInterval);
+                                isJumping = false;
+                            }
+                            jumpHeight += 10;
+                            Hippo.style.bottom = jumpHeight + "px";
+                        }, 20);
+                    }
+                    jumpHeight -= 10;
+                    Hippo.style.bottom = jumpHeight + "px";
+                }, 20);
+            }
+        }
+
+        function createObstacle() {
+            
+            let obstacle = document.createElement("div");
+            obstacle.classList.add("obstacle");
+            obstacle.style.left = game.clientWidth + "px";
+            game.appendChild(obstacle);
+
+            let moveObstacle = setInterval(() => {
+                let obstaclePosition = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
+                let HippoBottom = parseInt(window.getComputedStyle(Hippo).getPropertyValue("bottom"));
+
+                if (obstaclePosition <= 90 && obstaclePosition >= 50 && HippoBottom <= 40) {
+                    clearInterval(moveObstacle);
+                    alert("Game Over! Your jumps: " + count);
+                    document.location.reload();
+                } else if (obstaclePosition <= 0) {
+                    obstacle.remove();
+                    score++;
+                    scoreDisplay.innerText = "Score: " + score;
+                    if (score % 5 === 0) obstacleSpeed += 10;
+                }
+
+                obstacle.style.left = (obstaclePosition - obstacleSpeed) + "px";
+            }, 20);
+
+            setTimeout(createObstacle, Math.random() * 3000 + 1000);
+        }
+
+        document.addEventListener("keydown", event => {
+            if (event.code === "Space") jump();
+            count++;
+            countDisplay.innerText = "Jumps: " + count;
+        });
+
+        createObstacle();
+    </script>
+</body>
+</html>
